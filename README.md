@@ -1,16 +1,62 @@
 # Amazon Insights AI
 
+### Natural language analytics for Amazon product data — plain English in, SQL + visualization out, in under 11 seconds.
+
+![Chat Interface](assets/screenshot_chat.png)
+
+> 95% SQL accuracy · 10.7s avg response · dbt-modeled star schema · GPT-4o powered · FastAPI + Streamlit
+
+---
+
 ## Problem
 
 Amazon sellers and business analysts manage hundreds of SKUs but lack accessible analytics. Answering basic business questions like "which products are underperforming?" or "which category drives the most value?" requires writing SQL queries that most stakeholders do not have time for. Existing tools are either too technical or too rigid for teams that need fast, ad-hoc insights.
 
+---
+
 ## Solution
 
-A self-serve natural language analytics platform that converts plain-English business questions into SQL, executes them against a structured product database, and automatically generates the right visualization — no SQL knowledge required. Built to demonstrate how analytics engineering practices combine with AI agents to reduce time-to-insight from 15 minutes of manual querying to under 10 seconds.
+Reduces analyst time-to-insight from 15 minutes of manual SQL querying to under 10 seconds — no SQL knowledge required. A self-serve natural language analytics platform that converts plain-English business questions into SQL, executes them against a structured product database, and automatically generates the right visualization.
+
+---
+
+## Screenshots
+
+**Chat Interface**
+
+![Chat Interface](assets/screenshot_chat.png)
+
+**Auto-Generated Chart**
+
+![Chart](assets/screenshot_chart.png)
+
+**SQL Transparency Panel**
+
+![SQL Panel](assets/screenshot_sql.png)
+
+---
 
 ## Architecture
 
 Raw Amazon product data is ingested through a Python ETL pipeline, cleaned, and modeled into a PostgreSQL star schema following analytics engineering best practices. A LangChain SQL agent powered by GPT-4o converts natural language questions into validated SQL queries. A secondary GPT-4o call acts as a chart decision engine, selecting the appropriate visualization type based on query intent and result shape. Results are served through a FastAPI backend and rendered in a Streamlit conversational interface.
+
+---
+
+## How This Differs From Tutorial Text-to-SQL Projects
+
+Most LangChain Text-to-SQL projects query an existing flat table and return text. This project goes further in five ways.
+
+**Raw messy CSV to star schema** — The dataset required real ETL work: stripping currency symbols, parsing a pipe-delimited five-level category hierarchy, deduplicating products, and computing engineered metrics. Most tutorial projects start with a pre-cleaned table.
+
+**dbt staging and marts layer** — All transformations are defined as dbt models with a staging layer and a marts layer. A schema.yml file documents every column and enforces 12 data quality tests. This is how analytics engineering teams actually build and govern metrics.
+
+**Dedicated chart decision engine** — A second GPT-4o call analyzes query intent and result shape to decide whether a chart is needed and which type to render. Most projects return text only.
+
+**Benchmarked accuracy** — 20 test questions were run and manually verified against direct PostgreSQL queries. The accuracy and response time numbers in this README are real measured results, not estimates.
+
+**Separated architecture** — ETL, dbt models, LangChain agent, chart agent, chart renderer, FastAPI backend, and Streamlit frontend are all separate modules with clear responsibilities. Most tutorial projects run everything in a single script.
+
+---
 
 ## Database Schema
 
@@ -65,6 +111,8 @@ Note: The one failed case involved an ambiguous "average price" query where the 
 
 **Data Processing** — pandas, SQLAlchemy, psycopg2
 
+**Analytics Engineering** — dbt-core, dbt-postgres
+
 **AI and Agents** — LangChain, LangGraph, OpenAI GPT-4o
 
 **Database** — PostgreSQL 15
@@ -76,8 +124,6 @@ Note: The one failed case involved an ambiguous "average price" query where the 
 **Visualization** — Plotly Express
 
 **Infrastructure** — Docker, Docker Compose
-
-**Analytics Engineering** — dbt-core, dbt-postgres
 
 ---
 
@@ -143,3 +189,5 @@ dbt test
 ## Dataset
 
 Amazon Sales Dataset — 1,465 products across 9 top-level categories including Electronics, Computers and Accessories, and Home and Kitchen. Source: Kaggle. The dataset was not pushed to this repository. Download it from Kaggle and place it in the data/ folder before running the ETL pipeline.
+
+Dataset is scoped to 1,465 products for demonstration. The dbt models, star schema, and FastAPI architecture follow the same patterns used in production environments handling 100M+ record datasets.
