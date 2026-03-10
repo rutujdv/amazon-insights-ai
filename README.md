@@ -1,6 +1,6 @@
 # Amazon Insights AI
 
-### Natural language analytics for Amazon product data — plain English in, SQL + visualization out, in under 11 seconds.
+### Natural language analytics for Amazon product data - plain English in, SQL + visualization out, in under 11 seconds.
 
 ![Chat Interface](assets/screenshot_chat.png)
 
@@ -60,7 +60,7 @@ The architecture is modular. ETL, dbt models, LangChain agent, chart agent, char
 
 ## Data Model
 
-Raw flat CSV normalized into a PostgreSQL star schema — one fact table (pricing, ratings, discounts, value_score) and two dimension tables (products, categories). Category hierarchy parsed from pipe-delimited strings into five structured levels.
+Raw flat CSV normalized into a PostgreSQL star schema - one fact table (pricing, ratings, discounts, value_score) and two dimension tables (products, categories). Category hierarchy parsed from pipe-delimited strings into five structured levels.
 
 ---
 
