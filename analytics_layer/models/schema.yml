@@ -1,0 +1,68 @@
+version: 2
+
+sources:
+  - name: amazon_insights
+    database: amazon_insights
+    schema: public
+    tables:
+      - name: raw_amazon
+        description: Raw Amazon product data loaded from CSV
+
+models:
+  - name: stg_amazon_raw
+    description: Cleaned and filtered staging layer from raw Amazon data
+    columns:
+      - name: product_id
+        description: Unique product identifier
+        tests:
+          - not_null
+      - name: rating
+        description: Product rating out of 5
+        tests:
+          - not_null
+      - name: discounted_price
+        description: Current selling price in Indian Rupees
+        tests:
+          - not_null
+
+  - name: dim_products
+    description: Product dimension table with one row per unique product
+    columns:
+      - name: product_id
+        description: Unique product identifier
+        tests:
+          - not_null
+          - unique
+      - name: product_name
+        description: Full product name
+        tests:
+          - not_null
+
+  - name: dim_categories
+    description: Category dimension table with five level hierarchy
+    columns:
+      - name: category_id
+        description: Surrogate key for category
+        tests:
+          - not_null
+          - unique
+      - name: category_l1
+        description: Top level category
+        tests:
+          - not_null
+
+  - name: fct_product_metrics
+    description: Fact table with pricing, rating, and engineered metrics per product
+    columns:
+      - name: product_id
+        description: Foreign key to dim_products
+        tests:
+          - not_null
+      - name: value_score
+        description: Weighted popularity metric calculated as rating multiplied by rating_count
+        tests:
+          - not_null
+      - name: savings
+        description: Absolute price saving in Indian Rupees
+        tests:
+          - not_null
