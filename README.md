@@ -16,7 +16,7 @@ Amazon sellers and business analysts deal with hundreds of products across multi
 
 ## Solution
 
-Amazon Insights AI cuts that down to under 10 seconds. Type a plain-English question, get a verified SQL result, a written answer, and an automatically generated chart. No SQL knowledge required.
+Amazon Insights AI cuts that down to under 10 seconds. Type a plain English question, get a verified SQL result, a written answer, and an automatically generated chart. No SQL knowledge required.
 
 ---
 
